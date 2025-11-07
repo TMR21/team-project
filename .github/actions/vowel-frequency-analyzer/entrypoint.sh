@@ -18,9 +18,7 @@ python3 /action/github/scripts/frequency.py "/github/workspace/${FILE_ARG}" > /t
 FREQ_RESULT="$(cat /tmp/vowel_result.txt | tr -d '\r\n')"
 TIMESTAMP="$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 
-echo "Updating README..."
-bash /action/github/scripts/update_readme.sh "$FREQ_RESULT" "$GITHUB_USER" "$TIMESTAMP"
-
+# Configure git first
 git config --global user.name "github-actions[bot]"
 git config --global user.email "github-actions[bot]@users.noreply.github.com"
 git config --global --add safe.directory /github/workspace
@@ -28,14 +26,22 @@ git config --global --add safe.directory /github/workspace
 REPO_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 git remote set-url origin "$REPO_URL"
 
-# Pull latest changes first to avoid conflicts
+# Pull latest changes BEFORE making any modifications
 git pull origin main --no-rebase || true
+
+echo "Updating README..."
+bash /action/github/scripts/update_readme.sh "$FREQ_RESULT" "$GITHUB_USER" "$TIMESTAMP"
 
 git add README.md || true
 if ! git diff --cached --quiet; then
   git commit -m "Action: update README with vowel frequency by ${GITHUB_USER} at ${TIMESTAMP}" || true
-  # Pull again in case of concurrent updates, then push
-  git pull origin main --no-rebase || true
+  # Pull with rebase to handle concurrent updates
+  if ! git pull --rebase origin main; then
+    # If rebase fails due to conflicts, abort and use merge strategy
+    git rebase --abort 2>/dev/null || true
+    # Use union merge strategy to keep both our append and remote changes
+    git pull origin main --no-rebase -X union || true
+  fi
   git push origin HEAD:main --follow-tags
   echo "Pushed README update."
 else
