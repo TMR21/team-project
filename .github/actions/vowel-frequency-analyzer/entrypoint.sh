@@ -19,7 +19,7 @@ FREQ_RESULT="$(cat /tmp/vowel_result.txt | tr -d '\r\n')"
 TIMESTAMP="$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 
 echo "Updating README..."
-bash /github/scripts/update_readme.sh "$FREQ_RESULT" "$GITHUB_USER" "$TIMESTAMP"
+bash /github/workspace/github/scripts/update_readme.sh "$FREQ_RESULT" "$GITHUB_USER" "$TIMESTAMP"
 
 git config --global user.name "github-actions[bot]"
 git config --global user.email "github-actions[bot]@users.noreply.github.com"
