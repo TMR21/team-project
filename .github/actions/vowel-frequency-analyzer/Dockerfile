@@ -12,10 +12,13 @@ WORKDIR /github/workspace
 # Copy all necessary files
 COPY entrypoint.sh /github/workspace/entrypoint.sh
 COPY github /github/workspace/github
+COPY .github /github/workspace/.github
 
-# Set permissions
-RUN chmod +x /github/workspace/entrypoint.sh
-RUN chmod +x /github/workspace/github/scripts/update_readme.sh
+# Set permissions and fix line endings
+RUN chmod +x /github/workspace/entrypoint.sh && \
+    chmod +x /github/workspace/github/scripts/update_readme.sh && \
+    sed -i 's/\r$//' /github/workspace/.github/scripts/*.sh && \
+    chmod +x /github/workspace/.github/scripts/*.sh
 
 # Correct ENTRYPOINT path
 ENTRYPOINT ["/github/workspace/entrypoint.sh"]
