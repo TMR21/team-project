@@ -47,4 +47,3 @@ jobs:
           git commit -m "Workflow: Updated HTML and README for ${GITHUB_ACTOR}" || echo "No changes to commit"
           # push using token
           git push origin HEAD:main
-YML
