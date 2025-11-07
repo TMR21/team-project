@@ -1,0 +1,27 @@
+name: Vowel frequency CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Run vowel-frequency-analyzer action
+        uses: ./.github/actions/vowel-frequency-analyzer
+        with:
+          file: data.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: ${{ github.actor }}
+          GITHUB_REPOSITORY: ${{ github.repository }}

@@ -1,0 +1,11 @@
+name: "Vowel frequency analyzer"
+description: "Counts vowels in a file and updates README.md with result, user and timestamp."
+inputs:
+  file:
+    description: "Path to the text file to analyze (relative to repository root)"
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.file }}
