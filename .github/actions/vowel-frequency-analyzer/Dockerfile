@@ -15,4 +15,4 @@ COPY . /github/workspace
 RUN chmod +x /github/workspace/entrypoint.sh
 RUN chmod +x /github/workspace/github/scripts/update_readme.sh
 
-ENTRYPOINT ["/github/workspace/entrypoint.sh"]
+RUN chmod +x /github/workspace/entrypoint.sh
