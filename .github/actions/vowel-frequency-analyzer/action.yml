@@ -7,6 +7,5 @@ inputs:
 runs:
   using: "docker"
   image: "Dockerfile"
-  entrypoint: "/entrypoint.sh"
   args:
     - ${{ inputs.file }}
