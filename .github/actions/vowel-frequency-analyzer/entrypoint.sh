@@ -14,7 +14,7 @@ if [ -z "${GITHUB_REPOSITORY:-}" ]; then
 fi
 
 echo "Analyzing file: $FILE_ARG"
-python3 /github/scripts/frequency.py "/github/workspace/${FILE_ARG}" > /tmp/vowel_result.txt
+python3 /github/workspace/github/scripts/frequency.py "/github/workspace/${FILE_ARG}" > /tmp/vowel_result.txt
 FREQ_RESULT="$(cat /tmp/vowel_result.txt | tr -d '\r\n')"
 TIMESTAMP="$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 
