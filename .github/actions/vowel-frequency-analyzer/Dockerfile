@@ -1,18 +1,21 @@
 FROM python:3.9-slim
 
-# Install git and utilities
+# Install git and certificates
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     ca-certificates \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Set working directory inside the container
 WORKDIR /github/workspace
 
-# Copy the action files into the image (the runner will pass the repository into /github/workspace)
-COPY . /github/workspace
+# Copy all action files to the container
+COPY entrypoint.sh /github/workspace/entrypoint.sh
+COPY github /github/workspace/github
 
-# Make entrypoint executable
+# Ensure entrypoint and script permissions
 RUN chmod +x /github/workspace/entrypoint.sh
 RUN chmod +x /github/workspace/github/scripts/update_readme.sh
 
-RUN chmod +x /github/workspace/entrypoint.sh
+# Set the entrypoint
+ENTRYPOINT ["/github/workspace/entrypoint.sh"]
