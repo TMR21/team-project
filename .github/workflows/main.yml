@@ -13,3 +13,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+# Step 2: Conditionally update index.html only for certain actor(s)
+      - name: Update index.html when actor matches
+        run: |
+          ACTOR="${{ github.actor }}"
+          echo "Actor is: $ACTOR"
+          # List of allowed usernames that should update index.html
+          ALLOWED_USERS="TMR21 team-leader member1 member2"
+          for u in $ALLOWED_USERS; do
+            if [ "$u" = "$ACTOR" ]; then
+              # insert a line before </body> with the actor and date
+              sed -i "/<\/body>/i <p>Updated by ${ACTOR} on $(date -u '+%Y-%m-%d %H:%M:%S UTC')</p>" index.html || true
+              echo "Updated index.html for $ACTOR"
+              break
+            fi
+          done
