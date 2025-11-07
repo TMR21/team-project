@@ -28,9 +28,14 @@ git config --global --add safe.directory /github/workspace
 REPO_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 git remote set-url origin "$REPO_URL"
 
+# Pull latest changes first to avoid conflicts
+git pull origin main --no-rebase || true
+
 git add README.md || true
 if ! git diff --cached --quiet; then
   git commit -m "Action: update README with vowel frequency by ${GITHUB_USER} at ${TIMESTAMP}" || true
+  # Pull again in case of concurrent updates, then push
+  git pull origin main --no-rebase || true
   git push origin HEAD:main --follow-tags
   echo "Pushed README update."
 else
