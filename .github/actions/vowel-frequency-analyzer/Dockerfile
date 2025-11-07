@@ -5,11 +5,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy action files to /action directory
+WORKDIR /github/workspace
+
 COPY entrypoint.sh /entrypoint.sh
-COPY github /github
+COPY github /github/workspace/github
 
 RUN chmod +x /entrypoint.sh
-RUN chmod +x /github/scripts/update_readme.sh
+RUN chmod +x /github/workspace/github/scripts/update_readme.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
