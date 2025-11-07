@@ -23,6 +23,7 @@ bash /action/github/scripts/update_readme.sh "$FREQ_RESULT" "$GITHUB_USER" "$TIM
 
 git config --global user.name "github-actions[bot]"
 git config --global user.email "github-actions[bot]@users.noreply.github.com"
+git config --global --add safe.directory /github/workspace
 
 REPO_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 git remote set-url origin "$REPO_URL"
@@ -36,4 +37,4 @@ else
   echo "No changes to README; nothing to commit."
 fi
 
-echo "Action completed."
+echo "Action completed."
