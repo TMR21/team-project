@@ -29,3 +29,9 @@ jobs:
               break
             fi
           done
+
+ # Step 3: Append log to README.md
+      - name: Update README log
+        run: |
+          echo "### Updated by ${{ github.actor }} on $(date -u '+%Y-%m-%d %H:%M:%S UTC') [Commit: $(git rev-parse --short HEAD)]" >> README.md
+          echo "Appended README entry."
